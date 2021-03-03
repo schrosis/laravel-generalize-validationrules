@@ -10,12 +10,12 @@ class ValidationRules
      * バリデーションルール
      * required、nullable、sometimesなどはここでは定義しない
      */
-    private const RULES = [];
+    protected const RULES = [];
 
     /**
      * デフォルトのパラメータ名の別名
      */
-    private const KEY_ALIASES = [];
+    protected const KEY_ALIASES = [];
 
     /**
      * バリデーションルールを取得します
@@ -68,7 +68,7 @@ class ValidationRules
 
     protected function all(): array
     {
-        return self::RULES;
+        return static::RULES;
     }
 
     /**
@@ -82,7 +82,7 @@ class ValidationRules
     protected function keyName(string $key, array $keyAliases = []): string
     {
         return $keyAliases[$key]
-            ?? self::KEY_ALIASES[$key]
+            ?? static::KEY_ALIASES[$key]
             ?? Arr::last(explode('.', $key));
     }
 
