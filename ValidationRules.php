@@ -44,16 +44,25 @@ class ValidationRules
      * requiredやnullable、sometimesなどは第2引数で追加してください
      *
      * @param string $key
-     * @param array $additionalRules
+     * @param string|array $additionalRules
      * @return array
      */
-    public function getRule(string $key, array $additionalRules = []): array
+    public function getRule(string $key, $additionalRules = []): array
     {
-        return array_unique(
-            array_merge(
-                $additionalRules,
-                Arr::get($this->all(), $key, $this->notFound($key))
-            )
+        if (is_string($additionalRules)) {
+            $additionalRules = explode('|', $additionalRules);
+        }
+
+        $rules = Arr::get($this->all(), $key, $this->notFound($key));
+        if (is_string($rules)) {
+            $rules = explode('|', $rules);
+        }
+
+        return array_filter(
+            array_unique(array_merge($additionalRules, $rules)),
+            function ($rule) {
+                return $rule !== '';
+            }
         );
     }
 
